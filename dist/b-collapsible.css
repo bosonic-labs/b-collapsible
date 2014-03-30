@@ -1,0 +1,7 @@
+b-collapsible {
+  display: block;
+}
+
+.b-collapsible-closed {
+  display: none;
+}
