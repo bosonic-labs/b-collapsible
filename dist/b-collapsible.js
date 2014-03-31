@@ -1,9 +1,7 @@
 (function () {
     window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    var HEADER_CLASS = 'b-collapsible-header', BODY_CLASS = 'b-collapsible-body', CLOSED_CLASS = 'b-collapsible-closed';
     Bosonic.registerElement('b-collapsible', {
-        headerClass: 'b-collapsible-header',
-        closedClass: 'b-collapsible-closed',
-        doneInitialUpdate: false,
         get active() {
             return this.hasAttribute('active');
         },
@@ -13,12 +11,18 @@
         createdCallback: function () {
             this.duration = this.hasAttribute('duration') ? parseFloat(this.getAttribute('duration')) : 0.33;
             this.dimension = this.hasAttribute('horizontal') ? 'width' : 'height';
-            this.body = this.querySelector(':not(.' + this.headerClass + ')');
-            console.log(this.body);
-            this.header = this.querySelector('.' + this.headerClass);
-            this.addListeners();
-            this.update();
-            this.doneInitialUpdate = true;
+            this.body = this.querySelector(':not(.' + HEADER_CLASS + ')');
+            this.header = this.querySelector('.' + HEADER_CLASS);
+            if (this.body) {
+                this.body.style.overflow = 'hidden';
+                this.body.classList.add(BODY_CLASS);
+                this.addListeners();
+                this.toggleClosedClass(true);
+            }
+            if (this.active) {
+                this.setSize('auto');
+                this.toggleClosedClass(false);
+            }
         },
         detachedCallback: function () {
             this.removeListeners();
@@ -50,25 +54,18 @@
             this.update();
         },
         update: function () {
+            if (!this.body)
+                return;
             this.active ? this.show() : this.hide();
         },
         show: function () {
-            if (!this.doneInitialUpdate) {
-                this.transitionEnd();
-                this.doneInitialUpdate = true;
-                return;
-            }
             this.toggleClosedClass(false);
             var size = this.calcSize();
             this.updateSize(size, this.duration);
         },
         hide: function () {
-            if (!this.doneInitialUpdate) {
-                this.toggleClosedClass(true);
-                this.setSize(0);
-                this.doneInitialUpdate = true;
-                return;
-            }
+            var size = this.computeSize();
+            this.setSize(size);
             this.updateSize(0, this.duration);
         },
         updateSize: function (size, duration) {
@@ -80,9 +77,12 @@
         },
         calcSize: function () {
             this.setSize('auto');
-            var size = this.body.getBoundingClientRect()[this.dimension] + 'px';
+            var size = this.computeSize();
             this.setSize(0);
             return size;
+        },
+        computeSize: function () {
+            return this.body.getBoundingClientRect()[this.dimension] + 'px';
         },
         setSize: function (size) {
             this.body.style[this.dimension] = size;
@@ -92,10 +92,15 @@
             s.webkitTransition = s.transition = duration ? this.dimension + ' ' + duration + 's' : null;
         },
         toggleClosedClass: function (closed) {
-            closed ? this.body.classList.add(this.closedClass) : this.body.classList.remove(this.closedClass);
+            closed ? this.body.classList.add(CLOSED_CLASS) : this.body.classList.remove(CLOSED_CLASS);
         },
         transitionEnd: function () {
-            console.log('transitionEnd');
+            this.setTransitionDuration(null);
+            if (this.active) {
+                this.setSize('auto');
+            } else {
+                this.toggleClosedClass(true);
+            }
         }
     });
 }());

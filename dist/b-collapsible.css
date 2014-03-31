@@ -1,7 +1,11 @@
 b-collapsible {
-  /*display: block;*/
+  display: block;
 }
 
 .b-collapsible-closed {
-  /*display: none;*/
+  display: none;
+}
+
+.b-collapsible-body {
+  height: 0;
 }
