@@ -1,6 +1,6 @@
 {
   "name": "b-collapsible",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A Bosonic element which adds a collapsible behavior to a block with a header.",
   "main": "Gruntfile.js",
   "scripts": {
@@ -12,11 +12,14 @@
   },
   "author": "Raphaël Rougeron <goldoraf@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bosonic/b-collapsible/issues"
+  },
   "devDependencies": {
     "bosonic-test-tools": "*",
-    "grunt-bosonic": "*"
+    "grunt-bosonic": ">=0.4.0"
   },
   "dependencies": {
-    "bosonic": "*"
+    "bosonic": ">=0.4.0"
   }
 }

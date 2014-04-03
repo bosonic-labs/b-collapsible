@@ -70,7 +70,7 @@
                 this.body.removeEventListener('transitionend', this.transitionEndListener);
             },
 
-            attributeChanged: function(name, oldValue, newValue) {
+            attributeChangedCallback: function(name, oldValue, newValue) {
                 if (name === 'active') this.activeChanged(oldValue, newValue);
             },
 
