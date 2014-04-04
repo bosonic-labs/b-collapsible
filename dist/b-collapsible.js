@@ -117,8 +117,8 @@
                 value: function (size, duration) {
                     var that = this;
                     window.requestAnimationFrame(function () {
-                        that.setTransitionDuration(duration);
                         that.setSize(size);
+                        that.setTransitionDuration(duration);
                     });
                 }
             },
