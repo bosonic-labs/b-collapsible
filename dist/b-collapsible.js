@@ -20,13 +20,14 @@
                     this.header = this.querySelector('.' + HEADER_CLASS);
                     if (this.body) {
                         this.body.style.overflow = 'hidden';
-                        this.body.classList.add(BODY_CLASS);
+                        if (this.supportsTransitions()) {
+                            this.body.classList.add(BODY_CLASS);
+                            if (this.active) {
+                                this.setSize('auto');
+                            }
+                        }
                         this.addListeners();
-                        this.toggleClosedClass(true);
-                    }
-                    if (this.active) {
-                        this.setSize('auto');
-                        this.toggleClosedClass(false);
+                        this.toggleClosedClass(!this.active);
                     }
                 }
             },
@@ -43,9 +44,11 @@
                         this.toggleListener = this.toggle.bind(this);
                         this.header.addEventListener('click', this.toggleListener, false);
                     }
-                    this.transitionEndListener = this.transitionEnd.bind(this);
-                    this.body.addEventListener('webkitTransitionEnd', this.transitionEndListener);
-                    this.body.addEventListener('transitionend', this.transitionEndListener);
+                    if (this.supportsTransitions()) {
+                        this.transitionEndListener = this.transitionEnd.bind(this);
+                        this.body.addEventListener('webkitTransitionEnd', this.transitionEndListener);
+                        this.body.addEventListener('transitionend', this.transitionEndListener);
+                    }
                 }
             },
             removeListeners: {
@@ -54,8 +57,10 @@
                     if (this.toggleListener) {
                         this.header.removeEventListener('click', this.toggleListener, false);
                     }
-                    this.body.removeEventListener('webkitTransitionEnd', this.transitionEndListener);
-                    this.body.removeEventListener('transitionend', this.transitionEndListener);
+                    if (this.supportsTransitions()) {
+                        this.body.removeEventListener('webkitTransitionEnd', this.transitionEndListener);
+                        this.body.removeEventListener('transitionend', this.transitionEndListener);
+                    }
                 }
             },
             attributeChangedCallback: {
@@ -89,13 +94,19 @@
                 enumerable: true,
                 value: function () {
                     this.toggleClosedClass(false);
-                    var size = this.calcSize();
-                    this.updateSize(size, this.duration);
+                    if (this.supportsTransitions()) {
+                        var size = this.calcSize();
+                        this.updateSize(size, this.duration);
+                    }
                 }
             },
             hide: {
                 enumerable: true,
                 value: function () {
+                    if (!this.supportsTransitions()) {
+                        this.toggleClosedClass(true);
+                        return;
+                    }
                     var size = this.computeSize();
                     this.setSize(size);
                     this.updateSize(0, this.duration);
@@ -155,7 +166,19 @@
                         this.toggleClosedClass(true);
                     }
                 }
+            },
+            supportsTransitions: {
+                enumerable: true,
+                value: function () {
+                    return window.requestAnimationFrame !== undefined;
+                }
             }
         });
     window.BCollapsible = document.registerElement('b-collapsible', { prototype: BCollapsiblePrototype });
+    Object.defineProperty(BCollapsible.prototype, '_super', {
+        enumerable: false,
+        writable: false,
+        configurable: false,
+        value: HTMLElement.prototype
+    });
 }());
