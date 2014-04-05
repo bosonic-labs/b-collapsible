@@ -1,6 +1,6 @@
 {
   "name": "b-collapsible",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A Bosonic element which adds a collapsible behavior to a block with a header.",
   "main": "Gruntfile.js",
   "scripts": {

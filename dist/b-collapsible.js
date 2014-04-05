@@ -134,7 +134,20 @@
             computeSize: {
                 enumerable: true,
                 value: function () {
-                    return this.body.getBoundingClientRect()[this.dimension] + 'px';
+                    var size = parseInt(this.body.getBoundingClientRect()[this.dimension]);
+                    return size - this.getBorderWidth() + 'px';
+                }
+            },
+            getBorderWidth: {
+                enumerable: true,
+                value: function () {
+                    return this.dimension === 'width' ? this.computeWidth('borderLeftWidth') + this.computeWidth('borderRightWidth') : this.computeWidth('borderTopWidth') + this.computeWidth('borderBottomWidth');
+                }
+            },
+            computeWidth: {
+                enumerable: true,
+                value: function (property) {
+                    return parseInt(getComputedStyle(this.body)[property].replace('px', ''));
                 }
             },
             setSize: {

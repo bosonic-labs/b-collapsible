@@ -9,7 +9,7 @@
         }
 
         .b-collapsible-body {
-            height: 0;
+            height: 0px;
         }
     </style>
     <script>
@@ -125,7 +125,18 @@
             },
 
             computeSize: function() {
-                return this.body.getBoundingClientRect()[this.dimension] + 'px';
+                var size = parseInt(this.body.getBoundingClientRect()[this.dimension]);
+                return (size - this.getBorderWidth()) + 'px';
+            },
+
+            getBorderWidth: function() {
+                return this.dimension === 'width' 
+                        ? this.computeWidth('borderLeftWidth') + this.computeWidth('borderRightWidth')
+                        : this.computeWidth('borderTopWidth') + this.computeWidth('borderBottomWidth');
+            },
+
+            computeWidth: function(property) {
+                return parseInt(getComputedStyle(this.body)[property].replace('px', ''));
             },
 
             setSize: function(size) {
