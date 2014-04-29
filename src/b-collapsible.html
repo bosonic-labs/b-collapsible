@@ -36,8 +36,8 @@
             createdCallback: function() {
                 this.duration = this.hasAttribute('duration') ? parseFloat(this.getAttribute('duration')) : 0.33;
                 this.dimension = this.hasAttribute('horizontal') ? 'width' : 'height';
-                this.body = this.querySelector(':not(.' + HEADER_CLASS + ')');
                 this.header = this.querySelector('.' + HEADER_CLASS);
+                this.body = this.querySelector('.' + BODY_CLASS) || this.header.nextElementSibling;
 
                 if (this.body) {
                     this.body.style.overflow = 'hidden';
