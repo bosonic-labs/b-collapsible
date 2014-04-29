@@ -21,7 +21,7 @@
     </style>
     <b-collapsible active>
         <div class="b-collapsible-header">
-            Header
+            Header (cancelable show)
         </div>
         <div class="body">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer venenatis sodales arcu, ac fermentum metus hendrerit non. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor felis eget auctor aliquam. Sed sit amet est lectus. Duis posuere diam ac tellus facilisis interdum. Integer mattis euismod justo, ac facilisis elit bibendum vitae. Nulla fermentum aliquet elit, id auctor est viverra a. Duis semper nisl nulla. In venenatis dolor ut scelerisque dapibus. Quisque in pellentesque nibh. Proin consectetur in ligula nec auctor. Donec tincidunt est eget metus adipiscing viverra. Nulla ultricies et orci pharetra condimentum.
@@ -29,13 +29,19 @@
     </b-collapsible>
     <b-collapsible>
         <div class="b-collapsible-header">
-            Header
+            <span>Header</span>
         </div>
-        <div class="body">
+        <div class="b-collapsible-body">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer venenatis sodales arcu, ac fermentum metus hendrerit non. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor felis eget auctor aliquam. Sed sit amet est lectus. Duis posuere diam ac tellus facilisis interdum. Integer mattis euismod justo, ac facilisis elit bibendum vitae. Nulla fermentum aliquet elit, id auctor est viverra a. Duis semper nisl nulla. In venenatis dolor ut scelerisque dapibus. Quisque in pellentesque nibh. Proin consectetur in ligula nec auctor. Donec tincidunt est eget metus adipiscing viverra. Nulla ultricies et orci pharetra condimentum.
         </div>
     </b-collapsible>
     <script type="text/javascript">
-        
+        window.addEventListener('WebComponentsReady', function() {
+            document.querySelector('b-collapsible').addEventListener('b-collapsible-show', function(e) {
+                if (!confirm('Are you sure ?')) {
+                    e.preventDefault();
+                }
+            });
+        });
     </script>
 </body>

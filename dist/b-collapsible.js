@@ -73,6 +73,8 @@
             toggle: {
                 enumerable: true,
                 value: function () {
+                    if (!this.dispatchEvent(new CustomEvent('b-collapsible-toggle', { cancelable: true })))
+                        return;
                     this.active = !this.active;
                 }
             },
@@ -93,6 +95,8 @@
             show: {
                 enumerable: true,
                 value: function () {
+                    if (!this.dispatchEvent(new CustomEvent('b-collapsible-show', { cancelable: true })))
+                        return;
                     this.toggleClosedClass(false);
                     if (this.supportsTransitions()) {
                         var size = this.calcSize();
@@ -103,6 +107,8 @@
             hide: {
                 enumerable: true,
                 value: function () {
+                    if (!this.dispatchEvent(new CustomEvent('b-collapsible-hide', { cancelable: true })))
+                        return;
                     if (!this.supportsTransitions()) {
                         this.toggleClosedClass(true);
                         return;
